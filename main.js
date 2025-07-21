@@ -80,7 +80,7 @@ class Field {
 	
       // ตรวจสอบว่าตำแหน่งใหม่ยังอยู่ในขอบเขตของสนามหรือไม่
       if (!this.isInBounds(newRow, newCol)) {
-        console.log("คุณเดินออกนอกสนาม! เกมโอเวอร์!");
+        console.log("Loses by moving outside the field");
         playing = false;
         break; 
       }
@@ -93,12 +93,12 @@ class Field {
       if (this.isHole()) {
         this.field[this.positionRow][this.positionCol] = hole;
         this.print();
-        console.log("คุณตกลงไปในหลุม! เกมโอเวอร์!");
+        console.log("Loses by landing on a hole");
         playing = false;
       } else if (this.isHat()) {
         this.field[this.positionRow][this.positionCol] = hat;
         this.print(); 
-        console.log("ยินดีด้วย! คุณเจอหมวกแล้ว! คุณชนะ!");
+        console.log("Wins by finding the hat");
         playing = false;
       } else {
         // ถ้ายังไม่ชนะหรือแพ้ ให้ทำเครื่องหมายเส้นทางที่เดินผ่าน
@@ -146,7 +146,7 @@ class Field {
 }
 
 // สร้างสนามแบบสุ่ม (เช่น สูง 10, กว้าง 10, มีหลุม 20%)
-const myField = Field.generateField(5, 5, 0.2);
+const myField = Field.generateField(7, 7, 0.2);
 
 // สร้างอินสแตนซ์ของเกม
 const game = new Field(myField);
