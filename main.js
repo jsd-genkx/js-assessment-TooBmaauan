@@ -1,43 +1,81 @@
 "use strict";
-// JS Assessment: Find Your Hat //
+
+// นำเข้าโมดูลที่จำเป็น
 import promptSync from "prompt-sync";
 import clear from "clear-screen";
 
-const prompt = promptSync({ sigint: true });
+const prompt = promptSync({ sigint: true }); // กำหนดฟังก์ชัน prompt สำหรับรับ input
 
-
+// กำหนดสัญลักษณ์สำหรับองค์ประกอบต่างๆ ในสนาม
 const hat = "^";
 const hole = "O";
 const fieldCharacter = "░";
 const pathCharacter = "*";
 
 class Field {
-	constructor(field = [[]]) {
-		this.field = field;
+  constructor(field = [[]]) {
+    this.field = field; // เก็บสถานะของสนาม
+    this.positionRow = 0; // ตำแหน่งแถวปัจจุบันของผู้เล่น (เริ่มต้นที่ 0)
+    this.positionCol = 0; // ตำแหน่งคอลัมน์ปัจจุบันของผู้เล่น (เริ่มต้นที่ 0)
+    this.field[this.positionRow][this.positionCol] = pathCharacter; // ทำเครื่องหมายตำแหน่งเริ่มต้นของผู้เล่น
+  }
 
-		// Replace with your own code //
-		// Set the home position at (0, 0) before the game starts
-		this.positionRow = 0;
-		this.positionCol = 0;
-		this.field[this.positionRow][this.positionCol] = pathCharacter;
+  print() {
+    clear();
+
+    // ใช้ .join('') เพื่อรวมองค์ประกอบในแถวให้เป็นสตริงเดียว (ไม่มีคอมม่า)
+    this.field.forEach((row) => {
+      console.log(row.join(""));
+    });
+  }
+
+  isInBounds(row, col) {
+    return (
+      row >= 0 &&
+      row < this.field.length &&
+      col >= 0 &&
+      col < this.field[0].length
+    );
+  }
+
+  isHat() {
+    return this.field[this.positionRow][this.positionCol] === hat;
+  }
+
+  isHole() {
+    return this.field[this.positionRow][this.positionCol] === hole;
+  }
+
+  playGame() {
+    let playing = true;
+
+    while (playing) {
+      this.print();
+
+      const move = prompt(
+        "คุณต้องการไปทางไหน? (W: ขึ้น, S: ลง, A: ซ้าย, D: ขวา) "
+      ).toUpperCase();
+
+      // กำหนดตำแหน่งใหม่ตาม input
+      let newRow = this.positionRow;
+      let newCol = this.positionCol;
+
+      switch (move) {
+        case "W":
+          newRow -= 1;
+          break;
+        case "S":
+          newRow += 1;
+          break;
+        case "A":
+          newCol -= 1;
+          break;
+        case "D":
+          newCol += 1;
+          break;
+        default:
+          console.log("คำสั่งไม่ถูกต้อง กรุณาใส่ W, S, A, หรือ D");
+          continue;
+      }
 	}
-
-	// Print field //
-	print() {
-		clear();
-
-		// Replace with your own code //
-		console.log(this.field); // Please REMOVE this line before you start your code!
-	}
-
-	// Your Code //
 }
-
-// Game Mode ON
-// Remark: Code example below should be deleted and use your own code.
-const newGame = new Field([
-	["░", "░", "O"],
-	["░", "O", "░"],
-	["░", "^", "░"],
-]);
-newGame.print();
